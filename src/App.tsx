@@ -1,28 +1,17 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import "./App.css";
-import { selectProduct } from "./core/redux/features/products/productsSlice";
-import { getProducts } from "./core/redux/features/products/productThunks";
-import { AppDispatch } from "./core/redux/store";
+import ItemForm from "./components/Crud/Form/ItemForm";
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { products, loading, error } = useSelector(selectProduct);
+  const [selectedItem, setSlectedItem] = useState<ICrudItem | null>(null);
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  const handleClear = () => {
+    setSlectedItem(null);
+  };
 
   return (
     <>
-      {loading && <p>Loading....</p>}
-      {error && <p>Error</p>}
-      {products.map((i) => (
-        <div key={i.id} style={{ width: "200px", height: "auto", backgroundColor: "red" }}>
-          <h2>{i.title}</h2>
-          <h3>{i.description}</h3>
-        </div>
-      ))}
+      <ItemForm selectedItem={selectedItem} onClear={handleClear} />
     </>
   );
 }
